@@ -18,12 +18,13 @@ public class BoardDAO {
 		public List<BoardDO> getBoardList(String searchField, String searchText) {
 			System.out.println("===> getBoardList() 처리됨!");
 			
-			// 자바의 자료구조
-			List<BoardDO> boardList = new ArrayList<BoardDO>();
+			// [중요] 자바의 자료구조(가변 배열)
+			List<BoardDO> boardList = new ArrayList<BoardDO>();  // 기본 10개 확보
 			
 			try {
 				conn = JDBCUtil.getConnection();
 				
+				// [중요] 반드시 이해 필요!!
 				String where = "";
 				
 				if(searchField != null && searchText != null) {

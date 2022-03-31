@@ -5,6 +5,8 @@
 <%@ page import="board.BoardDAO" %>
 <%@ page import="java.util.List" %>
 
+<!-- JSTL 추가 -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	request.setCharacterEncoding("UTF-8");
 
@@ -60,7 +62,8 @@
 					<th bgcolor="orange" width="150">등록일</th>
 					<th bgcolor="orange" width="100">조회수</th>
 				</tr>
-				<% for(BoardDO board : boardList) { %>
+				<%-- 주석 처리 
+				<% for(BoardDO board : boardList) { %>  <!-- 자바의 확장된 for문 -->
 					<tr>
 						<td align="center"><%= board.getSeq() %></td>
 						<td align="left">
@@ -72,6 +75,20 @@
 						<td align="center"><%= board.getCnt() %></td>
 					</tr>	
 				<% } %>
+				--%>
+				
+				<%-- 위의 코드를 표현언어와 JSTL을 적용하여 소스 변경 --%>
+				<c:forEach var="board" items="${boardList}">
+					<tr>
+						<td align="center">${board.seq}</td>
+						<td align="left">
+							<a href="getBoard.jsp?seq=${board.seq}">${board.title}</a>
+						</td>
+						<td align="center">${board.writer}</td>
+						<td align="center">${board.regdate}</td>
+						<td align="center">${board.cnt}</td>
+					</tr>
+				</c:forEach>
 			</table>
 			<br>
 			<a href="insertBoard.jsp">새 게시글 등록</a>&nbsp;&nbsp;&nbsp;

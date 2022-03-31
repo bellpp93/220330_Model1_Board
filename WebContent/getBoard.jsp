@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>게시글 상세보기 페이지 => getBoard.jsp</title>
 </head>
 <body>
-
+	
 </body>
 </html>
