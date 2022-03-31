@@ -18,9 +18,10 @@
 	UserDAO userDAO = new UserDAO();
 	UserDO user = userDAO.getUser(userDO);
 	
-	// 4. 화면 네비게이션 => 포워딩
+	// 4. 화면 네비게이션 => 포워딩(클라이언트에게 응답해준다.)
 	if(user != null) {
 		// out.println("<script>alert('로그인 성공');</script>"); // 먼저 테스트 해보기
+		session.setAttribute("IdKey", id);
 		response.sendRedirect("getBoardList.jsp");
 	} else {
 		// out.println("<script>alert('로그인 실패');</script>");

@@ -16,6 +16,15 @@
 		searchField = request.getParameter("searchCondition");
 		searchText = request.getParameter("searchKeyword");
 	}
+	// BoardDAO 클래스 객체 생성
+	BoardDAO boardDAO = new BoardDAO();
+	List<BoardDO> boardList 
+			= boardDAO.getBoardList(searchField, searchText);
+	
+	request.setAttribute("boardList", boardList);
+	
+	int totalList = boardList.size();
+	request.setAttribute("totalList", totalList);
 %>
 
 <!DOCTYPE html>
@@ -42,6 +51,7 @@
 					</td>
 				</tr>
 			</table>
+		</form>
 			<table border="1" cellpadding="0" cellspacing="0" width="700">
 				<tr>
 					<th bgcolor="orange" width="100">번호</th>
@@ -50,13 +60,22 @@
 					<th bgcolor="orange" width="150">등록일</th>
 					<th bgcolor="orange" width="100">조회수</th>
 				</tr>
-				<%
-					for(BoardDO board : boardList) {
-						
-					}
-				%>
+				<% for(BoardDO board : boardList) { %>
+					<tr>
+						<td align="center"><%= board.getSeq() %></td>
+						<td align="left">
+							<a href="getBoard.jsp?seq=<%=board.getSeq() %>">
+								<%= board.getTitle() %></a>
+						</td>
+						<td align="center"><%= board.getWriter() %></td>
+						<td align="center"><%= board.getRegdate() %></td>
+						<td align="center"><%= board.getCnt() %></td>
+					</tr>	
+				<% } %>
 			</table>
-		</form>
+			<br>
+			<a href="insertBoard.jsp">새 게시글 등록</a>&nbsp;&nbsp;&nbsp;
+			<a href="getBoardList.jsp">전체 게시글 목록 보기</a>
 	</div>
 </body>
 </html>
