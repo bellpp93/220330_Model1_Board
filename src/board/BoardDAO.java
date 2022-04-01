@@ -52,5 +52,43 @@ public class BoardDAO {
 				JDBCUtil.close(rs, pstmt, conn);
 			}
 			return boardList;
+		} // end getBoardList() ================================================
+		
+		// 게시글 상세 보기 메소드 구현
+		public BoardDO getBoard(BoardDO boardDO) {
+			System.out.println("===> JDBC로 getBoard() 기능 처리됨!");
+			
+			BoardDO board = null;
+			
+			try {
+				conn = JDBCUtil.getConnection();
+				
+				// [중요] 해당 게시글의 조회수(cnt)를 1증가 시킨다.
+				String UPDATE_CNT = "update board set cnt=cnt+1 where seq=?";
+				pstmt = conn.prepareStatement(UPDATE_CNT);
+				pstmt.setInt(1, boardDO.getSeq());
+				pstmt.executeUpdate();  // DML 작업은 executeUpdate() 호출함!
+				
+				// 해당 게시글 select하여 가져오기
+				String BOARD_GET = "select * from board where seq=?";
+				pstmt = conn.prepareStatement(BOARD_GET);
+				pstmt.setInt(1, boardDO.getSeq());
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					board = new BoardDO();
+					board.setSeq(rs.getInt("SEQ"));
+					board.setTitle(rs.getString("TITLE"));
+					board.setWriter(rs.getString("WRITER"));
+					board.setContent(rs.getString("CONTENT"));
+					board.setRegdate(rs.getDate("REGDATE"));
+					board.setCnt(rs.getInt("CNT"));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				JDBCUtil.close(rs, pstmt, conn);
+			}
+			return board;
 		}
 }
