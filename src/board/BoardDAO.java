@@ -90,5 +90,67 @@ public class BoardDAO {
 				JDBCUtil.close(rs, pstmt, conn);
 			}
 			return board;
+		}  // end getBoard() ====================================================================
+
+		// 새 게시글 등록 메소드 구현
+		public void insertBoard(BoardDO boardDO) {
+			System.out.println("===> JDBC로 insertBoard() 메소드 처리됨!");
+			
+			try {
+				conn = JDBCUtil.getConnection();
+				
+				String BOARD_INSERT 
+					= "insert into board(seq,title,writer,content) values((select nvl(max(seq),0)+1 from board),?,?,?)";
+				pstmt = conn.prepareStatement(BOARD_INSERT);
+				pstmt.setString(1, boardDO.getTitle());
+				pstmt.setString(2, boardDO.getWriter());				
+				pstmt.setString(3, boardDO.getContent());				
+				
+				pstmt.executeUpdate();  // board 테이블에 데이터 저장 완료!!
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				JDBCUtil.close(pstmt, conn);
+			}
+		}  // end insertBoard() ================================================================
+		
+		// 게시글 수정 처리 메소드 구현
+		public void updateBoard(BoardDO boardDO) {
+			System.out.println("===> JDBC로 updateBoard() 메소드 처리됨!");
+			
+			try {
+				conn = JDBCUtil.getConnection();
+				
+				String BOARD_UPDATE 
+					= "update board set title=?, content=? where seq=?";
+				pstmt = conn.prepareStatement(BOARD_UPDATE);
+				pstmt.setString(1, boardDO.getTitle());
+				pstmt.setString(2, boardDO.getContent());
+				pstmt.setInt(3, boardDO.getSeq());
+				
+				pstmt.executeUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				JDBCUtil.close(pstmt, conn);
+			}
+		}  // end updateBoard() ================================================================
+		
+		// 게시글 삭제 처리 메소드 구현
+		public void deleteBoard(BoardDO boardDO) {
+			System.out.println("===> JDBC로 deleteBoard() 메소드 처리됨!");
+			
+			try {
+				conn = JDBCUtil.getConnection();
+				
+				String DELETE_BOARD = "delete from board where seq=?";
+				pstmt = conn.prepareStatement(DELETE_BOARD);
+				pstmt.setInt(1, boardDO.getSeq());
+				pstmt.executeUpdate();  // seq 조건에 맞는 레코드 삭제 처리
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				JDBCUtil.close(pstmt, conn);
+			}
 		}
 }
